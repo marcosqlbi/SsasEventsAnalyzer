@@ -1,0 +1,5 @@
+<Delete xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <Object>
+    <TraceID>TraceQuery</TraceID>
+  </Object>
+</Delete>

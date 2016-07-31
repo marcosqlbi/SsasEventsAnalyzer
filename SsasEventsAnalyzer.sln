@@ -3,20 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Xmla", "Xmla", "{50943755-F891-4050-8641-0D310136350B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Xmla", "Xmla", "{692373AD-472A-4373-A61C-0C6EEDB4F118}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\DevTemp\XEvents\TraceProcess.xmla = ..\..\..\DevTemp\XEvents\TraceProcess.xmla
-		..\..\..\DevTemp\XEvents\TraceProcessStop.xmla = ..\..\..\DevTemp\XEvents\TraceProcessStop.xmla
-		..\..\..\DevTemp\XEvents\TraceQuery.xmla = ..\..\..\DevTemp\XEvents\TraceQuery.xmla
-		..\..\..\DevTemp\XEvents\TraceQueryStop.xmla = ..\..\..\DevTemp\XEvents\TraceQueryStop.xmla
+		Xmla\TraceProcess.xmla = Xmla\TraceProcess.xmla
+		Xmla\TraceProcessStop.xmla = Xmla\TraceProcessStop.xmla
+		Xmla\TraceQuery.xmla = Xmla\TraceQuery.xmla
+		Xmla\TraceQueryStop.xmla = Xmla\TraceQueryStop.xmla
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{55ADFC13-D590-4A4E-B203-77BEDDC51F9C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{A448235A-E917-4262-A6F5-29B099EDBDE9}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\DevTemp\XEvents\Extract Event Descriptions.sql = ..\..\..\DevTemp\XEvents\Extract Event Descriptions.sql
-		..\..\..\DevTemp\XEvents\PollAndStartTraceJobs.sql = ..\..\..\DevTemp\XEvents\PollAndStartTraceJobs.sql
-		..\..\..\DevTemp\XEvents\XEvents-Process.sql = ..\..\..\DevTemp\XEvents\XEvents-Process.sql
-		..\..\..\DevTemp\XEvents\XEvents-Query.sql = ..\..\..\DevTemp\XEvents\XEvents-Query.sql
+		Sql\Extract Event Descriptions.sql = Sql\Extract Event Descriptions.sql
+		Sql\PollAndStartTraceJobs.sql = Sql\PollAndStartTraceJobs.sql
+		Sql\XEvents-Process.sql = Sql\XEvents-Process.sql
+		Sql\XEvents-Query.sql = Sql\XEvents-Query.sql
 	EndProjectSection
 EndProject
 Global

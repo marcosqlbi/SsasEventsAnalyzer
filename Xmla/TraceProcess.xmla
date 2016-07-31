@@ -1,0 +1,21 @@
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ObjectDefinition>
+    <Trace>
+      <ID>TraceProcess</ID>
+      <Name>TraceProcess</Name>
+      <XEvent xmlns="http://schemas.microsoft.com/analysisservices/2011/engine/300/300">
+        <event_session name="TraceProcess" dispatchLatency="0" maxEventSize="0" maxMemory="4" memoryPartition="none" eventRetentionMode="AllowSingleEventLoss" trackCausality="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+          <event package="AS" name="CommandEnd" />
+          <event package="AS" name="ProgressReportEnd" />
+          <target package="package0" name="event_file">
+            <parameter name="filename" value="C:\Program Files\Microsoft SQL Server\MSAS13.TAB16\OLAP\Log\TraceProcess.xel" />
+            <parameter name="max_file_size" value="4096" />
+            <parameter name="max_rollover_files" value="10" />
+            <parameter name="increment" value="1024" />
+          </target>
+        </event_session>
+      </XEvent>
+    </Trace>
+  </ObjectDefinition>
+</Create>
+
