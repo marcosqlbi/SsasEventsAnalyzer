@@ -1,6 +1,6 @@
 WITH    XmlEvents
           AS ( SELECT   CAST (event_data AS XML) AS E
-               FROM     sys.fn_xe_file_target_read_file('K:\DevTemp\XEvents\*.xel', NULL, NULL, NULL)
+               FROM     sys.fn_xe_file_target_read_file('C:\Program Files\Microsoft SQL Server\MSAS13.TAB16\OLAP\Log\*.xel', NULL, NULL, NULL)
              ),
         TabularEvents
           AS ( SELECT   [Text] = E.value('(/event/data[@name="TextData"]/value)[1]', 'varchar(max)'),
