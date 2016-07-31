@@ -19,6 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{A448235A-E91
 		Sql\XEvents-Query.sql = Sql\XEvents-Query.sql
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Excel", "Excel", "{A4A301B9-B265-4201-A722-66D8CC769F8F}"
+	ProjectSection(SolutionItems) = preProject
+		Excel\SsasEventsAnalyzer.xlsx = Excel\SsasEventsAnalyzer.xlsx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
