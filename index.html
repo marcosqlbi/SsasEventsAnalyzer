@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ssaseventsanalyzer by marcosqlbi</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Ssaseventsanalyzer</h1>
+        <p>SSAS Events Analyzer</p>
+
+        <p class="view"><a href="https://github.com/marcosqlbi/SsasEventsAnalyzer">View the Project on GitHub <small>marcosqlbi/SsasEventsAnalyzer</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/marcosqlbi/SsasEventsAnalyzer/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/marcosqlbi/SsasEventsAnalyzer/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/marcosqlbi/SsasEventsAnalyzer">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>If you want to monitor a production Analysis Services instance, you do not have many options available out of the box. The SQL Server Profiler is a tool that has been deprecated in SQL Server 2016, but it is still supported for Analysis Services workloads (<a href="https://msdn.microsoft.com/en-us/library/ms181091.aspx">see more info on MSDN</a>).</p>
+
+<p>You might use <a href="https://blogs.msdn.microsoft.com/karang/2012/06/05/ssas-monitoring-tool-astrace/">AS Trace</a> as a tool to automate the capture of Profiler events, but the profiler API have an additional overhead that can be lowered using the new Extended Events platform. 
+You can find a good <a href="http://markvsql.com/2014/02/introduction-to-analysis-services-extended-events/">introduction to Extended Events written by Mark Vaillancourt</a> that references other article on the same topic. In SQL Server 2016 there is a user interface to create, stop, and displays Extended Events sessions in Analysis Services 2016, described by <a href="https://blogs.msdn.microsoft.com/analysisservices/2015/09/22/using-extended-events-with-sql-server-analysis-services-2016-ctp-2-3/">Adam Saxton in a blog post</a>.</p>
+
+<p>This project started from the articles described above to create a simple monitoring system that can be easily applied to any server with a minimal effort. The goals were the following:
+1. Monitor a production server with a minimal impact, collecting information about query and process
+2. Analyze data to locate most expensive queries
+3. Analyze data to detect increasing processing time</p>
+
+<p>The initial focus was on Tabular models, but in reality the same technique can be applied to Multidimensional. You might want to add events in Multidimensional to analyze access to aggregations, but you should minimize the number of events logged in order to avoid slowing performance, so you might consider extending the events captured based on your specific requirements and workload.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/marcosqlbi">marcosqlbi</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
