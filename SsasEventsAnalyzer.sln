@@ -3,6 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Xmla", "Xmla", "{50943755-F891-4050-8641-0D310136350B}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\DevTemp\XEvents\TraceProcess.xmla = ..\..\..\DevTemp\XEvents\TraceProcess.xmla
+		..\..\..\DevTemp\XEvents\TraceProcessStop.xmla = ..\..\..\DevTemp\XEvents\TraceProcessStop.xmla
+		..\..\..\DevTemp\XEvents\TraceQuery.xmla = ..\..\..\DevTemp\XEvents\TraceQuery.xmla
+		..\..\..\DevTemp\XEvents\TraceQueryStop.xmla = ..\..\..\DevTemp\XEvents\TraceQueryStop.xmla
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{55ADFC13-D590-4A4E-B203-77BEDDC51F9C}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\DevTemp\XEvents\Extract Event Descriptions.sql = ..\..\..\DevTemp\XEvents\Extract Event Descriptions.sql
+		..\..\..\DevTemp\XEvents\PollAndStartTraceJobs.sql = ..\..\..\DevTemp\XEvents\PollAndStartTraceJobs.sql
+		..\..\..\DevTemp\XEvents\XEvents-Process.sql = ..\..\..\DevTemp\XEvents\XEvents-Process.sql
+		..\..\..\DevTemp\XEvents\XEvents-Query.sql = ..\..\..\DevTemp\XEvents\XEvents-Query.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
