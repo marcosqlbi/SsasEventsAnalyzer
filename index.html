@@ -33,10 +33,13 @@
 <p>You might use <a href="https://blogs.msdn.microsoft.com/karang/2012/06/05/ssas-monitoring-tool-astrace/">AS Trace</a> as a tool to automate the capture of Profiler events, but the profiler API have an additional overhead that can be lowered using the new Extended Events platform. 
 You can find a good <a href="http://markvsql.com/2014/02/introduction-to-analysis-services-extended-events/">introduction to Extended Events written by Mark Vaillancourt</a> that references other article on the same topic. In SQL Server 2016 there is a user interface to create, stop, and displays Extended Events sessions in Analysis Services 2016, described by <a href="https://blogs.msdn.microsoft.com/analysisservices/2015/09/22/using-extended-events-with-sql-server-analysis-services-2016-ctp-2-3/">Adam Saxton in a blog post</a>.</p>
 
-<p>This project started from the articles described above to create a simple monitoring system that can be easily applied to any server with a minimal effort. The goals were the following:
-1. Monitor a production server with a minimal impact, collecting information about query and process
-2. Analyze data to locate most expensive queries
-3. Analyze data to detect increasing processing time</p>
+<p>This project started from the articles described above to create a simple monitoring system that can be easily applied to any server with a minimal effort. The goals were the following:</p>
+
+<ol>
+<li>Monitor a production server with a minimal impact, collecting information about query and process</li>
+<li>Analyze data to locate most expensive queries</li>
+<li>Analyze data to detect increasing processing time</li>
+</ol>
 
 <p>The initial focus was on Tabular models, but in reality the same technique can be applied to Multidimensional. You might want to add events in Multidimensional to analyze access to aggregations, but you should minimize the number of events logged in order to avoid slowing performance, so you might consider extending the events captured based on your specific requirements and workload.</p>
       </section>
