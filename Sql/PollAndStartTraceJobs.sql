@@ -1,4 +1,6 @@
 -- Poll and start Trace Process
+-- Note 2016.08.02 - this procedure is no longer useful by using the 
+-- AutoRestart property in the XMLA trace start command
 DECLARE @traceProcessActive AS INT = (
     SELECT COUNT(*) FROM 
     OPENROWSET ( 'MSOLAP','DataSource=LOCALHOST\TAB16;Initial Catalog=Contoso',
