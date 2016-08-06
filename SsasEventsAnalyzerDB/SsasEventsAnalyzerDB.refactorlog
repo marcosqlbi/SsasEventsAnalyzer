@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="d022b764-0170-4c34-ad0e-4dcb04ff8f5e" ChangeDateTime="08/06/2016 15:38:34">
+    <Property Name="ElementName" Value="[stg].[xEventQueryTrace]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[stg]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[xEventTraceQuery]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="dc9f42c6-fedf-4531-9d6d-ebbeb10caa8e" ChangeDateTime="08/06/2016 15:39:58">
+    <Property Name="ElementName" Value="[stg].[LoadxEventQueryTraceData]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[stg]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[LoadxEventTraceQueryData]" />
+  </Operation>
+</Operations>

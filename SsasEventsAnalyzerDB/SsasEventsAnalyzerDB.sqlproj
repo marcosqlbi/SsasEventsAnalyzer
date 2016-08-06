@@ -71,13 +71,15 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\Schemas\stg.sql" />
-    <Build Include="Schemas\stg\Tables\xEventQueryTrace.sql" />
+    <Build Include="Schemas\stg\Tables\xEventTraceQuery.sql" />
     <Build Include="Schemas\dbo\Tables\Query.sql" />
     <Build Include="Schemas\dbo\Tables\QueryExecution.sql" />
-    <Build Include="Schemas\stg\Stored Procedures\LoadxEventQueryTraceData.sql" />
+    <Build Include="Schemas\stg\Stored Procedures\LoadxEventTraceQueryData.sql" />
     <Build Include="Security\Schemas\log.sql" />
     <Build Include="Schemas\log\Stored Procedures\LogError.sql" />
     <Build Include="Schemas\log\Tables\Error.sql" />
+    <Build Include="Schemas\stg\Tables\xEventTraceProcess.sql" />
+    <Build Include="Schemas\stg\Stored Procedures\LoadxEventTraceProcessData.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
@@ -93,5 +95,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DEV-Localhost-DropCreate.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SsasEventsAnalyzerDB.refactorlog" />
   </ItemGroup>
 </Project>

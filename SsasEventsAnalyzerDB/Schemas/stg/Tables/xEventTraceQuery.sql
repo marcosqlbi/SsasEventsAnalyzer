@@ -1,4 +1,4 @@
-﻿CREATE TABLE [stg].[xEventQueryTrace]
+﻿CREATE TABLE [stg].[xEventTraceQuery]
 (
 	[ActivityID]				[varchar](255)			NULL,
 	[ActivityIDxfer]			[varchar](255)			NULL,

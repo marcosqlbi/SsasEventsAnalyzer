@@ -1,15 +1,30 @@
-﻿CREATE PROCEDURE [stg].[LoadxEventQueryTraceData]
+﻿CREATE PROCEDURE [stg].[LoadxEventTraceQueryData]
 	 @path_to_trace_file		VARCHAR(1024) = 'C:\Program Files\Microsoft SQL Server\MSAS13.TAB16\OLAP\Log\'
 AS
 BEGIN;
+	--
+	-- DESCRIPTION
+	--      Extracts data from xEvent trace file (based on TraceQuery.xmla) and 
+	--		loads into a staging table (stg.xEventTraceQuery). Query and QueryExecution 
+	--		tables are populated from staging table
+	--
+	-- PARAMETERS
+	--		@path_to_trace_file
+	--			* specifies the path from where the xEvent trace files (*.xel) are stored
+	--			* must contain trailing backslash
+	--			* default value: 'C:\Program Files\Microsoft SQL Server\MSAS13.TAB16\OLAP\Log\'
+	--
+	-- RETURN VALUE
+	--         0 - No Error.
+	--
 	SET NOCOUNT ON;
 
 	BEGIN TRY
-	--C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log
+
 		-- ==============================================================
 		-- Extract RAW xEvent data into staging table
 		-- ==============================================================
-		DECLARE @xe_file_target VARCHAR(1024) = @path_to_trace_file + '*.xel';
+		DECLARE @xe_file_target VARCHAR(1024) = @path_to_trace_file + 'TraceQuery*.xel';
 
 		WITH    XmlEvents
 				  AS ( SELECT   CAST (event_data AS XML) AS E
@@ -41,7 +56,7 @@ BEGIN;
 								[ActivityID] = E.value('(/event/action[@name="attach_activity_id"]/value)[1]', 'varchar(255)')
 					   FROM     XmlEvents
 					 )
-		INSERT INTO stg.xEventQueryTrace (
+		INSERT INTO stg.[xEventTraceQuery] (
 					 [ActivityID]
 					,[ActivityIDxfer]
 					,[CPUTime]
@@ -112,7 +127,7 @@ BEGIN;
 							WHEN stg.EventSubclass = 3 THEN 'DAX'
 						END
 					,NK_QueryChecksum = stg.NK_QueryChecksum
-			FROM	stg.xEventQueryTrace stg
+			FROM	stg.[xEventTraceQuery] stg
 			WHERE	NOT EXISTS (
 						SELECT	TOP 1 'Exists'
 						FROM	dbo.Query q
@@ -152,7 +167,7 @@ BEGIN;
 					,[Server] = stg.[ServerName]
 					,[Success] = stg.[Success]
 					,[Severity] = stg.[Severity]
-			FROM	stg.xEventQueryTrace stg
+			FROM	stg.[xEventTraceQuery] stg
 					INNER JOIN dbo.Query q
 						ON	q.NK_QueryChecksum = stg.NK_QueryChecksum
 			WHERE	NOT EXISTS (
@@ -167,7 +182,7 @@ BEGIN;
 		-- ==============================================================
 		-- Cleanup
 		-- ==============================================================
-		TRUNCATE TABLE stg.xEventQueryTrace
+		TRUNCATE TABLE stg.[xEventTraceQuery]
 
 	END TRY
 	BEGIN CATCH
