@@ -79,13 +79,14 @@ BEGIN;
 					,EventClassDescription
 			)
 			SELECT  c.EventClassId,
-					sc.EventSubclassId,
+					EventSubclassId = ISNULL(sc.EventSubclassId,-1),
 					c.EventClassName,
-					sc.EventSubClassName,
+					EventSubClassName = ISNULL(sc.EventSubClassName,'no subclass'),
 					c.EventClassDescription
 			FROM    #xEventClass c
-					INNER JOIN #xEventSubclass sc
-						ON	sc.EventClassId = c.EventClassId;
+					LEFT OUTER JOIN #xEventSubclass sc
+						ON	sc.EventClassId = c.EventClassId
+		;
 
 		DROP TABLE #xEventClass;
 		DROP TABLE #xEventSubclass;
