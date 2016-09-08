@@ -16,10 +16,8 @@
     [Success]					[int]				NULL,
     [Severity]					[int]				NULL,
 	
-	[Created]					DATETIME2(3)		NOT NULL
-		CONSTRAINT DF_dbo_QueryExecution_Created DEFAULT(GETDATE()),
+	[Created]					DATETIME2(3)		NOT NULL,
 	[LastUpdated]				DATETIME2(3)		NOT NULL
-		CONSTRAINT DF_dbo_QueryExecution_Updated DEFAULT(GETDATE())
 		
 	,CONSTRAINT [PK_dbo_QueryExecution] PRIMARY KEY CLUSTERED ([ID_QueryExecution] ASC)
 
@@ -27,6 +25,18 @@
 		FOREIGN KEY ([ID_Query])
 		REFERENCES [dbo].[Query] ([ID_Query])
 )
+;
+GO
+
+ALTER TABLE [dbo].[QueryExecution]
+	ADD CONSTRAINT DF_dbo_QueryExecution_Created
+	DEFAULT(GETDATE()) FOR [Created]
+;
+GO
+
+ALTER TABLE [dbo].[QueryExecution]
+	ADD CONSTRAINT DF_dbo_QueryExecution_LastUpdated
+	DEFAULT(GETDATE()) FOR [LastUpdated]
 ;
 GO
 

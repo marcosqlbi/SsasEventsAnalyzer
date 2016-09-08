@@ -243,3 +243,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+
+# Ignore basic DB test-related files (for now)
+/SsasEventsAnalyzerDB/Tests/

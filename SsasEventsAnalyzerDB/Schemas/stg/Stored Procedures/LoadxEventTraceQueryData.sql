@@ -20,18 +20,26 @@ BEGIN;
 	SET NOCOUNT ON;
 
 	BEGIN TRY
+	
+		DECLARE @xe_file_target VARCHAR(1024);
+
+		/* add trailing slash if missing */
+		IF (RIGHT(@path_to_trace_file,1) != '\')
+			SET @xe_file_target = @path_to_trace_file + '\' + 'TraceQuery*.xel';
+		ELSE
+			SET @xe_file_target = @path_to_trace_file + 'TraceQuery*.xel';
 
 		-- ==============================================================
 		-- Extract RAW xEvent data into staging table
 		-- ==============================================================
-		DECLARE @xe_file_target VARCHAR(1024) = @path_to_trace_file + 'TraceQuery*.xel';
-
 		WITH    XmlEvents
 				  AS ( SELECT   CAST (event_data AS XML) AS E
 					   FROM     sys.fn_xe_file_target_read_file(@xe_file_target, NULL, NULL, NULL)
 					 ),
 				TabularEvents
-				  AS ( SELECT   [Text] = E.value('(/event/data[@name="TextData"]/value)[1]', 'varchar(max)'),
+				  AS ( SELECT   [ActivityID] = E.value('(/event/action[@name="attach_activity_id"]/value)[1]', 'varchar(255)'),
+								[ActivityIDxfer] = E.value('(/event/action[@name="attach_activity_id_xfer"]/value)[1]', 'varchar(255)'),
+								[ConnectionID] = E.value('(/event/data[@name="ConnectionID"]/value)[1]', 'int'),
 								[CPUTime] = E.value('(/event/data[@name="CPUTime"]/value)[1]', 'int'),
 								[CurrentTime] = E.value('(/event/data[@name="CurrentTime"]/value)[1]', 'datetime'),
 								[DatabaseName] = E.value('(/event/data[@name="DatabaseName"]/value)[1]', 'varchar(255)'),
@@ -41,24 +49,23 @@ BEGIN;
 								[EventClass] = E.value('(/event/data[@name="EventClass"]/value)[1]', 'int'),
 								[EventSubclass] = E.value('(/event/data[@name="EventSubclass"]/value)[1]', 'int'),
 								[IntegerData] = E.value('(/event/data[@name="IntegerData"]/value)[1]', 'int'),
-								[NTCanonicalUserName] = E.value('(/event/data[@name="NTCanonicalUserName"]/value)[1]',
-																'varchar(255)'),
+								[NTCanonicalUserName] = E.value('(/event/data[@name="NTCanonicalUserName"]/value)[1]', 'varchar(255)'),
 								[NTDomainName] = E.value('(/event/data[@name="NTDomainName"]/value)[1]', 'varchar(255)'),
 								[NTUserName] = E.value('(/event/data[@name="NTUserName"]/value)[1]', 'varchar(255)'),
-								[ServerName] = E.value('(/event/data[@name="ServerName"]/value)[1]', 'varchar(255)'),
 								[ObjectPath] = E.value('(/event/data[@name="ObjectPath"]/value)[1]', 'varchar(255)'),
+								[RequestID] = E.value('(/event/data[@name="RequestID"]/value)[1]', 'varchar(255)'),
+								[ServerName] = E.value('(/event/data[@name="ServerName"]/value)[1]', 'varchar(255)'),
+								[SessionID] = E.value('(/event/data[@name="SessionID"]/value)[1]', 'varchar(255)'),
+								[Severity] = E.value('(/event/data[@name="Severity"]/value)[1]', 'int'),
 								[StartTime] = E.value('(/event/data[@name="StartTime"]/value)[1]', 'datetimeoffset'),
 								[Success] = E.value('(/event/data[@name="Success"]/value)[1]', 'int'),
-								[Severity] = E.value('(/event/data[@name="Severity"]/value)[1]', 'int'),
-								[RequestID] = E.value('(/event/data[@name="RequestID"]/value)[1]', 'varchar(255)'),
-								[ActivityIDxfer] = E.value('(/event/action[@name="attach_activity_id_xfer"]/value)[1]',
-														   'varchar(255)'),
-								[ActivityID] = E.value('(/event/action[@name="attach_activity_id"]/value)[1]', 'varchar(255)')
+								[Text] = E.value('(/event/data[@name="TextData"]/value)[1]', 'varchar(max)')
 					   FROM     XmlEvents
 					 )
 		INSERT INTO stg.[xEventTraceQuery] (
 					 [ActivityID]
 					,[ActivityIDxfer]
+					,[ConnectionID]
 					,[CPUTime]
 					,[CurrentTime]
 					,[DatabaseName]
@@ -73,22 +80,22 @@ BEGIN;
 					,[NTUserName]
 					,[ObjectPath]
 					,[RequestID]
-					,[StartTime]
 					,[ServerName]
+					,[SessionID]
 					,[Severity]
+					,[StartTime]
 					,[Success]
 					,[Text]
 					,[NK_QueryChecksum]
 			)
-			SELECT	 te.ActivityIDxfer
-					,te.ActivityID
+			SELECT	 te.ActivityID
+					,te.ActivityIDxfer
+					,te.ConnectionID
 					,te.CPUTime
 					,te.CurrentTime
 					,te.DatabaseName
 					,te.Duration
-					,EndTime = CAST (CASE WHEN te.EndTime >= CAST ('20100101' AS DATETIMEOFFSET) THEN te.EndTime
-											ELSE NULL
-									END AS DATETIME)
+					,EndTime = CAST (CASE WHEN te.EndTime >= CAST ('20100101' AS DATETIMEOFFSET) THEN te.EndTime ELSE NULL END AS DATETIME)
 					,te.ErrorType
 					,te.EventClass
 					,te.EventSubclass
@@ -98,12 +105,10 @@ BEGIN;
 					,te.NTUserName
 					,te.ObjectPath
 					,te.RequestID
-					,StartTime = CAST (CASE WHEN te.StartTime >= CAST ('20100101' AS DATETIMEOFFSET)
-											THEN te.StartTime
-											ELSE NULL
-										END AS DATETIME)
 					,te.ServerName
+					,te.SessionID
 					,te.Severity
+					,StartTime = CAST (CASE WHEN te.StartTime >= CAST ('20100101' AS DATETIMEOFFSET) THEN te.StartTime ELSE NULL END AS DATETIME)
 					,te.Success
 					,te.[Text]
 					,[NK_QueryChecksum] = CONVERT (VARBINARY(8), CHECKSUM([Text]))
@@ -112,6 +117,7 @@ BEGIN;
 					AND te.EventSubclass IN ( 0, 3 ); -- Only gets MDX and DAX
 		;
 		
+
 		-- ==============================================================
 		-- Query
 		-- ==============================================================
@@ -120,7 +126,7 @@ BEGIN;
 					,QueryType
 					,NK_QueryChecksum
 			)
-			SELECT  QueryString = stg.[Text]
+			SELECT   QueryString = stg.[Text]
 					,QueryType = 
 						CASE
 							WHEN stg.EventSubclass = 0 THEN 'MDX'
@@ -133,6 +139,12 @@ BEGIN;
 						FROM	dbo.Query q
 						WHERE	q.[NK_QueryChecksum] = stg.[NK_QueryChecksum]
 					)
+			GROUP BY stg.[Text]
+					,CASE
+						WHEN stg.EventSubclass = 0 THEN 'MDX'
+						WHEN stg.EventSubclass = 3 THEN 'DAX'
+					 END
+					,stg.NK_QueryChecksum
 		;
 		-- ==============================================================
 		-- Query Execution
@@ -177,7 +189,6 @@ BEGIN;
 								qe.[QueryStartDT] = stg.[StartTime]
 					)
 			;
-
 			
 		-- ==============================================================
 		-- Cleanup

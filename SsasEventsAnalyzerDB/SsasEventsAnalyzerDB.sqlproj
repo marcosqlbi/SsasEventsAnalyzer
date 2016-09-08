@@ -68,6 +68,8 @@
     <Folder Include="Schemas\log" />
     <Folder Include="Schemas\log\Tables" />
     <Folder Include="Schemas\log\Stored Procedures" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\PostDeployment" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\Schemas\stg.sql" />
@@ -100,5 +102,18 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SsasEventsAnalyzerDB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="xevent_decode_load_flag">
+      <DefaultValue>1</DefaultValue>
+      <Value>$(SqlCmdVar__2)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="xevent_decode_source_filepath">
+      <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\bin\Resources\1033\tracedefinition130.xml</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\PostDeployment\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

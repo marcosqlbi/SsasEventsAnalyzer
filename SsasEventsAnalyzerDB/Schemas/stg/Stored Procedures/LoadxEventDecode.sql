@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [stg].[LoadxEventDecode]
-	@filepath_TraceDefinitinion		VARCHAR(300) = N'C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_MD\OLAP\bin\Resources\1033\tracedefinition130.xml'
+	@filepath_TraceDefinitinion		VARCHAR(300) = N'C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\bin\Resources\1033\tracedefinition130.xml'
 AS
 BEGIN;
 	--
@@ -10,7 +10,7 @@ BEGIN;
 	-- PARAMETERS
 	--		@filepath_TraceDefinitinion
 	--			* specifies the filepath for the tracedefinition file
-	--			* default value: 'C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_MD\OLAP\bin\Resources\1033\tracedefinition130.xml'
+	--			* default value: 'C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\bin\Resources\1033\tracedefinition130.xml'
 	--
 	-- RETURN VALUE
 	--         0 - No Error.
@@ -70,23 +70,26 @@ BEGIN;
 		FROM    @xmlSSAS_TraceDefinition.nodes('/TRACEDEFINITION/EVENTCATEGORYLIST/EVENTCATEGORY/EVENTLIST/EVENT/EVENTCOLUMNLIST/EVENTCOLUMN/EVENTCOLUMNSUBCLASSLIST/EVENTCOLUMNSUBCLASS')
 				AS t ( c );
 
+		BEGIN TRANSACTION;
+			TRUNCATE TABLE stg.xEventDecode;
 
-		INSERT INTO stg.xEventDecode ( 
-					 EventClassId
-					,EventSubclassId
-					,EventClassName
-					,EventSubclassName
-					,EventClassDescription
-			)
-			SELECT  c.EventClassId,
-					EventSubclassId = ISNULL(sc.EventSubclassId,-1),
-					c.EventClassName,
-					EventSubClassName = ISNULL(sc.EventSubClassName,'no subclass'),
-					c.EventClassDescription
-			FROM    #xEventClass c
-					LEFT OUTER JOIN #xEventSubclass sc
-						ON	sc.EventClassId = c.EventClassId
-		;
+			INSERT INTO stg.xEventDecode ( 
+						 EventClassId
+						,EventSubclassId
+						,EventClassName
+						,EventSubclassName
+						,EventClassDescription
+				)
+				SELECT  c.EventClassId,
+						EventSubclassId = ISNULL(sc.EventSubclassId,-1),
+						c.EventClassName,
+						EventSubClassName = ISNULL(sc.EventSubClassName,'no subclass'),
+						c.EventClassDescription
+				FROM    #xEventClass c
+						LEFT OUTER JOIN #xEventSubclass sc
+							ON	sc.EventClassId = c.EventClassId
+			;
+		COMMIT;
 
 		DROP TABLE #xEventClass;
 		DROP TABLE #xEventSubclass;
