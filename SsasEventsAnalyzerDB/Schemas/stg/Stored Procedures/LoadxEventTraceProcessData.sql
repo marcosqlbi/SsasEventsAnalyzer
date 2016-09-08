@@ -96,6 +96,10 @@ BEGIN;
 					,[Success]
 					,[Text]
 					,[NK_ProcessChecksum]
+
+					,[ModelName]
+					,[TableName]
+					,[PartitionName]
 			)
 			SELECT	 te.ActivityID
 					,te.ActivityIDxfer
@@ -125,10 +129,37 @@ BEGIN;
 					,te.Success
 					,te.[Text]
 					,NK_ProcessChecksum = CONVERT(VARBINARY(8), CHECKSUM([Text]))
+
+					,[ModelName] = 
+						CASE
+							WHEN	te.EventClass = 6 AND /* Progress Report End */
+									te.EventSubClass != 14 AND /* Query */
+									te.ObjectPath IS NOT NULL AND RTRIM(te.ObjectPath) != '' AND
+									te.ObjectType IN (100016, 100021)
+							THEN
+								SUBSTRING(
+									 te.ObjectPath
+									,CHARINDEX('.', te.ObjectPath, CHARINDEX('.', te.ObjectPath, 0)+1)+1
+									,CASE
+										WHEN CHARINDEX('.', te.ObjectPath, CHARINDEX('.', te.ObjectPath, CHARINDEX('.', te.ObjectPath, 0)+1)+1) = 0 THEN LEN(te.ObjectPath) 
+										ELSE CHARINDEX('.', te.ObjectPath, CHARINDEX('.', te.ObjectPath, CHARINDEX('.', te.ObjectPath, 0)+1)+1)-CHARINDEX('.', te.ObjectPath, CHARINDEX('.', te.ObjectPath, 0)+1)-1 
+									 END
+								) 
+						END
+						
+					,[TableName] =
+						CASE
+							WHEN	te.EventClass = 6 AND /* Progress Report End */
+									te.EventSubClass != 14 AND /* Query */
+									te.ObjectPath IS NOT NULL AND RTRIM(te.ObjectPath) != '' AND
+									te.ObjectType IN (100006, 100007, 100008)
+							THEN	te.ObjectName
+						END
+					,[PartitionName] = CASE WHEN te.ObjectType IN (100021) THEN te.ObjectName END
 			FROM    TabularEvents te
 			WHERE   te.EventClass IN (6, 16) -- Command End, Progress Report End
 		;
-		
+
 		-- ==============================================================
 		-- Database 
 		-- ==============================================================
@@ -147,39 +178,40 @@ BEGIN;
 		;
 		-- ==============================================================
 		-- Model 
-		-- ==============================================================
-		;WITH
-			CTE_model AS (
-				SELECT	DISTINCT 
-						trc.DatabaseName,
-						[ModelName] = 
-							SUBSTRING(
-								 trc.ObjectPath
-								,CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, 0)+1)+1
-								,CASE
-									WHEN CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, 0)+1)+1) = 0 THEN LEN(trc.ObjectPath) 
-									ELSE CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, 0)+1)+1)-CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, 0)+1)-1 
-								 END
-							) 
-				FROM	stg.xEventTraceProcess trc
-						INNER JOIN stg.xEventDecode x 
-							ON	x.EventClassId = trc.EventClass AND
-								x.EventSubclassId = trc.EventSubclass
-				WHERE	x.EventClassName = 'Progress Report End' AND 
-						x.EventSubClassName != 'Query' AND
-						trc.ObjectPath IS NOT NULL AND RTRIM(trc.ObjectPath) != '' AND
-						trc.ObjectType IN (100016, 100021)
-			)		   
+		-- ==============================================================	   
 		INSERT INTO [dbo].[Model] (ModelName, [ID_Database])
-			SELECT	 stg_model.ModelName
+			SELECT	 trc.ModelName
 					,db.[ID_Database] 
-			FROM	CTE_model stg_model
+			FROM	stg.xEventTraceProcess trc
 					INNER JOIN [dbo].[Database] AS db
-						ON	stg_model.DatabaseName = db.DatabaseName
-					LEFT JOIN [dbo].[Model] AS d
-						ON	d.ModelName = stg_model.ModelName AND 
-							d.[ID_Database] = db.[ID_Database]
-			WHERE	d.ModelName IS NULL
+						ON	trc.DatabaseName = db.DatabaseName
+					LEFT JOIN [dbo].[Model] AS m
+						ON	m.ModelName = trc.ModelName AND 
+							m.[ID_Database] = db.[ID_Database]
+			WHERE	m.ModelName IS NULL AND
+					trc.ModelName IS NOT NULL
+			GROUP BY trc.ModelName
+					,db.[ID_Database]
+		;
+		-- ==============================================================
+		-- Table
+		-- ==============================================================
+		INSERT INTO [dbo].[Table] (TableName, TableGUID, [ID_Database])
+			SELECT	 trc.TableName
+					,TableGUID = trc.ObjectID
+					,db.ID_Database
+			FROM	stg.xEventTraceProcess trc
+					INNER JOIN [dbo].[Database] AS db
+						ON	db.DatabaseName = trc.DatabaseName
+					LEFT JOIN [dbo].[Table] AS t
+						ON	t.TableName = trc.TableName AND 
+							t.TableGUID = trc.ObjectID AND 
+							t.[ID_Database] = db.ID_Database
+			WHERE	trc.TableName IS NOT NULL AND 
+					t.[ID_Table] IS NULL
+			GROUP BY trc.TableName
+					,trc.ObjectID
+					,db.ID_Database
 		;
 
 		-- ==============================================================

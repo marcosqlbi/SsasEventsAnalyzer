@@ -27,5 +27,9 @@
 	[Severity]					[int]					NULL,
 	[Success]					[int]					NULL,
 	[Text]						[varchar](max)			NULL,
-	[NK_ProcessChecksum]		[varbinary](8)			NULL
+	[NK_ProcessChecksum]		[varbinary](8)			NULL,
+
+	[ModelName]					[varchar](255)			NULL,
+	[TableName]					[varchar](255)			NULL,
+	[PartitionName]				[varchar](255)			NULL
 )
