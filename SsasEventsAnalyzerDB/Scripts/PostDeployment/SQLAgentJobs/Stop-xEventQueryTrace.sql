@@ -31,7 +31,7 @@ EXEC msdb.dbo.sp_add_job
 		@notify_level_netsend=0, 
 		@notify_level_page=0, 
 		@delete_level=0, 
-		@description=N'Starts SSAS xEvent trace collecting query data.', 
+		@description=N'Stops SSAS xEvent trace collecting query data.', 
 		--@owner_login_name=N'sa', 
 		@job_id = @StopQueryTrace_JobId OUTPUT
 ;

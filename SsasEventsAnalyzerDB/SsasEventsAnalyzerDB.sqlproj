@@ -88,6 +88,8 @@
     <Build Include="Schemas\dbo\Tables\Process.sql" />
     <Build Include="Schemas\dbo\Tables\ProcessExecution.sql" />
     <None Include="Scripts\PostDeployment\SQLAgentJobs\Stop-xEventQueryTrace.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\Start-xEventProcessTrace.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\Stop-xEventProcessTrace.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
@@ -117,16 +119,24 @@
       <DefaultValue>SQL-DEV-02\SSAS_TAB</DefaultValue>
       <Value>$(SqlCmdVar__6)</Value>
     </SqlCmdVariable>
+    <SqlCmdVariable Include="StartProcessTrace_JobName">
+      <DefaultValue>xEventProcess-StartTrace</DefaultValue>
+      <Value>$(SqlCmdVar__8)</Value>
+    </SqlCmdVariable>
     <SqlCmdVariable Include="StartQueryTrace_JobName">
-      <DefaultValue>Start-xEventQueryTrace</DefaultValue>
+      <DefaultValue>xEventQuery-StartTrace</DefaultValue>
       <Value>$(SqlCmdVar__5)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="flg_xevent_decode_load">
       <DefaultValue>1</DefaultValue>
       <Value>$(SqlCmdVar__2)</Value>
     </SqlCmdVariable>
+    <SqlCmdVariable Include="StopProcessTrace_JobName">
+      <DefaultValue>xEventProcess-StopTrace</DefaultValue>
+      <Value>$(SqlCmdVar__9)</Value>
+    </SqlCmdVariable>
     <SqlCmdVariable Include="StopQueryTrace_JobName">
-      <DefaultValue>Stop-xEventQueryTrace</DefaultValue>
+      <DefaultValue>xEventQuery-StopTrace</DefaultValue>
       <Value>$(SqlCmdVar__7)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="xevent_decode_source_filepath">
