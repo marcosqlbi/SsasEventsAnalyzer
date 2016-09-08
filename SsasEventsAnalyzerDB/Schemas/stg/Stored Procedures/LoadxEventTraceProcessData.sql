@@ -53,7 +53,11 @@ BEGIN;
 								[NTCanonicalUserName] = E.value('(/event/data[@name="NTCanonicalUserName"]/value)[1]', 'varchar(255)'),
 								[NTDomainName] = E.value('(/event/data[@name="NTDomainName"]/value)[1]', 'varchar(255)'),
 								[NTUserName] = E.value('(/event/data[@name="NTUserName"]/value)[1]', 'varchar(255)'),
+								[ObjectID] = E.value('(/event/data[@name="ObjectID"]/value)[1]', 'varchar(255)'),
+								[ObjectName] = E.value('(/event/data[@name="ObjectName"]/value)[1]', 'varchar(255)'),
 								[ObjectPath] = E.value('(/event/data[@name="ObjectPath"]/value)[1]', 'varchar(255)'),
+								[ObjectType] = E.value('(/event/data[@name="ObjectType"]/value)[1]', 'int'),
+								[ProgressTotal] = E.value('(/event/data[@name="ProgressTotal"]/value)[1]', 'int'),
 								[RequestID] = E.value('(/event/data[@name="RequestID"]/value)[1]', 'varchar(255)'),
 								[ServerName] = E.value('(/event/data[@name="ServerName"]/value)[1]', 'varchar(255)'),
 								[SessionID] = E.value('(/event/data[@name="SessionID"]/value)[1]', 'varchar(255)'),
@@ -79,7 +83,11 @@ BEGIN;
 					,[NTCanonicalUserName]
 					,[NTDomainName]
 					,[NTUserName]
+					,[ObjectID]
+					,[ObjectName]
 					,[ObjectPath]
+					,[ObjectType]
+					,[ProgressTotal]
 					,[RequestID]
 					,[ServerName]
 					,[SessionID]
@@ -104,7 +112,11 @@ BEGIN;
 					,te.NTCanonicalUserName
 					,te.NTDomainName
 					,te.NTUserName
+					,te.ObjectID
+					,te.ObjectName
 					,te.ObjectPath
+					,te.ObjectType
+					,te.ProgressTotal
 					,te.RequestID
 					,te.ServerName
 					,te.SessionID
@@ -118,6 +130,59 @@ BEGIN;
 		;
 		
 		-- ==============================================================
+		-- Database 
+		-- ==============================================================
+		INSERT INTO [dbo].[Database] (DatabaseName)
+			SELECT	stg.DatabaseName
+			FROM	stg.xEventTraceProcess stg
+					INNER JOIN stg.xEventDecode x 
+						ON	x.EventClassId = stg.EventClass AND
+							x.EventSubclassId = stg.EventSubclass
+					LEFT OUTER JOIN [dbo].[Database] AS d
+						ON	stg.DatabaseName = d.DatabaseName
+			WHERE	d.[ID_Database] IS NULL AND
+					x.EventClassName = 'Command End' AND 
+					x.EventSubclassName = 'Process'
+			GROUP BY stg.DatabaseName
+		;
+		-- ==============================================================
+		-- Model 
+		-- ==============================================================
+		;WITH
+			CTE_model AS (
+				SELECT	DISTINCT 
+						trc.DatabaseName,
+						[ModelName] = 
+							SUBSTRING(
+								 trc.ObjectPath
+								,CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, 0)+1)+1
+								,CASE
+									WHEN CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, 0)+1)+1) = 0 THEN LEN(trc.ObjectPath) 
+									ELSE CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, 0)+1)+1)-CHARINDEX('.', trc.ObjectPath, CHARINDEX('.', trc.ObjectPath, 0)+1)-1 
+								 END
+							) 
+				FROM	stg.xEventTraceProcess trc
+						INNER JOIN stg.xEventDecode x 
+							ON	x.EventClassId = trc.EventClass AND
+								x.EventSubclassId = trc.EventSubclass
+				WHERE	x.EventClassName = 'Progress Report End' AND 
+						x.EventSubClassName != 'Query' AND
+						trc.ObjectPath IS NOT NULL AND RTRIM(trc.ObjectPath) != '' AND
+						trc.ObjectType IN (100016, 100021)
+			)		   
+		INSERT INTO [dbo].[Model] (ModelName, [ID_Database])
+			SELECT	 stg_model.ModelName
+					,db.[ID_Database] 
+			FROM	CTE_model stg_model
+					INNER JOIN [dbo].[Database] AS db
+						ON	stg_model.DatabaseName = db.DatabaseName
+					LEFT JOIN [dbo].[Model] AS d
+						ON	d.ModelName = stg_model.ModelName AND 
+							d.[ID_Database] = db.[ID_Database]
+			WHERE	d.ModelName IS NULL
+		;
+
+		-- ==============================================================
 		-- Process 
 		-- ==============================================================
 		INSERT INTO [dbo].[Process] (
@@ -129,7 +194,7 @@ BEGIN;
 			FROM	stg.xEventTraceProcess stg
 					LEFT JOIN dbo.[Process] AS p
 						ON	p.NK_ProcessChecksum = stg.NK_ProcessChecksum
-			WHERE	p.ID_Process IS NULL and 
+			WHERE	p.ID_Process IS NULL AND 
 					stg.EventClass = 16 AND /* Command End */
 					stg.EventSubclass = 3 /* Process */
 			GROUP BY stg.[Text]
@@ -148,12 +213,14 @@ BEGIN;
 					,[CPUTime]
 					,[Duration_ms]
 					,[CPUTime_ms]
-					,[Database]
+					,[ID_Database]
 					,[Domain]
 					,[User]
 					,[Server]
 					,[Success]
 					,[Severity]
+					,[ActivityID]
+					,[ActivityIDxfer]
 			)
 			SELECT   [ID_Process] = q.[ID_Process]
 					,[ProcessStartDate] = CAST (stg.[StartTime] AS DATE)
@@ -163,16 +230,22 @@ BEGIN;
 					,[CPUTime] = CAST ( CAST ( stg.[CPUTime] / 86400000.0 AS DATETIME ) AS TIME(3))
 					,[Duration_ms] = stg.[Duration]
 					,[CPUTime_ms] = stg.[CPUTime]
-					,[Database] = stg.[DatabaseName]
+					,[ID_Database] = d.ID_Database
 					,[Domain] = stg.[NTDomainName]
 					,[User] = stg.[NTUserName]
 					,[Server] = stg.[ServerName]
 					,[Success] = stg.[Success]
-					,[Severity] = stg.[Severity]
+					,[Severity] = stg.Severity
+					,[ActivityID] = stg.ActivityID
+					,[ActivityIDxfer] = stg.ActivityIDxfer
 			FROM	stg.[xEventTraceProcess] stg
 					INNER JOIN dbo.Process q
 						ON	q.NK_ProcessChecksum = stg.NK_ProcessChecksum
-			WHERE	NOT EXISTS (
+					INNER JOIN dbo.[Database] d
+						ON	d.DatabaseName = stg.DatabaseName
+			WHERE	stg.EventClass = 16 AND /* Command End */
+					stg.EventSubclass = 3 AND /* Process */
+					NOT EXISTS (
 						SELECT	TOP 1 'Exists'
 						FROM	dbo.ProcessExecution qe
 						WHERE	qe.[ID_Process] = q.[ID_Process] AND
@@ -182,7 +255,7 @@ BEGIN;
 		-- ==============================================================
 		-- Cleanup
 		-- ==============================================================
-		TRUNCATE TABLE stg.[xEventTraceProcess];
+		--TRUNCATE TABLE stg.[xEventTraceProcess];
 
 	END TRY
 	BEGIN CATCH

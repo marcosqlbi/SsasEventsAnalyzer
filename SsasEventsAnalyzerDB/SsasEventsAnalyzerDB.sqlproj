@@ -90,6 +90,8 @@
     <None Include="Scripts\PostDeployment\SQLAgentJobs\Stop-xEventQueryTrace.sql" />
     <None Include="Scripts\PostDeployment\SQLAgentJobs\Start-xEventProcessTrace.sql" />
     <None Include="Scripts\PostDeployment\SQLAgentJobs\Stop-xEventProcessTrace.sql" />
+    <Build Include="Schemas\dbo\Tables\Model.sql" />
+    <Build Include="Schemas\dbo\Tables\Database.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">

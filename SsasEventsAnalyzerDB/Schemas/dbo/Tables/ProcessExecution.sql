@@ -9,20 +9,29 @@
 	[CPUTime]					[time]				NULL,
 	[Duration_ms]				[int]				NULL,
 	[CPUTime_ms]				[int]				NULL,
-	[Database]					[varchar](255)		NULL,
+	[ID_Database]				[int]				NULL,
     [Domain]					[varchar](255)		NULL,
     [User]						[varchar](255)		NULL,
     [Server]					[varchar](255)		NULL,
     [Success]					[int]				NULL,
     [Severity]					[int]				NULL,
+
+	
+	[ActivityID]				[varchar](255)		NULL,
+	[ActivityIDxfer]			[varchar](255)		NULL,
 	
 	[Created]					DATETIME2(3)		NOT NULL,
 	[LastUpdated]				DATETIME2(3)		NOT NULL
 	
 	,CONSTRAINT [PK_ssastab_ProcessingExecution] PRIMARY KEY CLUSTERED ([ID_ProcessExecution] ASC)
+
 	,CONSTRAINT FK_dbo_ProcessExecution__ProcessId
 		FOREIGN KEY ([ID_Process])
 		REFERENCES [dbo].[Process] ([ID_Process])
+
+	,CONSTRAINT FK_dbo_ProcessExecution__DatabaseId
+		FOREIGN KEY ([ID_Database])
+		REFERENCES [dbo].[Database] ([ID_Database])
 )
 ;
 GO
