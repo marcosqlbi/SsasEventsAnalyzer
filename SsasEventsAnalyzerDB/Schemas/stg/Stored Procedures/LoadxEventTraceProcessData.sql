@@ -100,6 +100,7 @@ BEGIN;
 					,[ModelName]
 					,[TableName]
 					,[PartitionName]
+					,[PartitionTableGUID]
 			)
 			SELECT	 te.ActivityID
 					,te.ActivityIDxfer
@@ -152,10 +153,11 @@ BEGIN;
 							WHEN	te.EventClass = 6 AND /* Progress Report End */
 									te.EventSubClass != 14 AND /* Query */
 									te.ObjectPath IS NOT NULL AND RTRIM(te.ObjectPath) != '' AND
-									te.ObjectType IN (100006, 100007, 100008)
+									te.ObjectType IN (100006, 100007, 100008, 100016)
 							THEN	te.ObjectName
 						END
 					,[PartitionName] = CASE WHEN te.ObjectType IN (100021) THEN te.ObjectName END
+					,[PartitionTableGUID] = CASE WHEN te.ObjectType IN (100021) THEN REVERSE(LEFT(RIGHT( REVERSE(te.ObjectPath), LEN( REVERSE(te.ObjectPath) ) - CHARINDEX('.',REVERSE(te.ObjectPath)) ), CHARINDEX('.',RIGHT( REVERSE(te.ObjectPath), LEN( REVERSE(te.ObjectPath) ) - CHARINDEX('.',REVERSE(te.ObjectPath)) )) - 1)) END
 			FROM    TabularEvents te
 			WHERE   te.EventClass IN (6, 16) -- Command End, Progress Report End
 		;
@@ -214,6 +216,28 @@ BEGIN;
 					,db.ID_Database
 		;
 
+		-- ==============================================================
+		-- Partition
+		-- ==============================================================
+		INSERT INTO [dbo].[Partition] (PartitionName, PartitionGUID, [ID_Table])
+			SELECT	 trc.PartitionName
+					,PartitionGUID = trc.ObjectID
+					,t.[ID_Table]
+			FROM	stg.xEventTraceProcess trc
+					INNER JOIN [dbo].[Database] AS db
+						ON	db.DatabaseName = trc.DatabaseName
+					INNER JOIN [dbo].[Table] AS t
+						ON	t.TableGUID = trc.PartitionTableGUID AND 
+							t.[ID_Database] = db.ID_Database
+					LEFT OUTER JOIN dbo.[Partition] p
+						ON	p.PartitionGUID = trc.ObjectID AND
+							p.ID_Table = t.ID_Table 
+			WHERE	trc.PartitionName IS NOT NULL AND
+					p.PartitionGUID IS NULL
+			GROUP BY trc.PartitionName
+					,trc.ObjectID
+					,t.[ID_Table]
+		;
 		-- ==============================================================
 		-- Process 
 		-- ==============================================================

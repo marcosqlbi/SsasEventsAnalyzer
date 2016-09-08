@@ -93,6 +93,7 @@
     <Build Include="Schemas\dbo\Tables\Model.sql" />
     <Build Include="Schemas\dbo\Tables\Database.sql" />
     <Build Include="Schemas\dbo\Tables\Table.sql" />
+    <Build Include="Schemas\dbo\Tables\Partition.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
