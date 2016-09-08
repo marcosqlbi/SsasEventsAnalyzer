@@ -3,6 +3,7 @@
 	[ActivityID]				[varchar](255)			NULL,
 	[ActivityIDxfer]			[varchar](255)			NULL,
 	[CPUTime]					[bigint]				NULL,
+	[ConnectionID]				[int]					NULL,
 	[CurrentTime]				[datetimeoffset]		NULL,
 	[DatabaseName]				[varchar](255)			NULL,
 	[Duration]					[bigint]				NULL,
@@ -17,8 +18,10 @@
 	[ObjectPath]				[varchar](255)			NULL,
 	[RequestID]					[varchar](255)			NULL,
 	[StartTime]					[datetimeoffset]		NULL,
+	[SessionID]					[varchar](255)			NULL,
 	[ServerName]				[varchar](255)			NULL,
 	[Severity]					[int]					NULL,
 	[Success]					[int]					NULL,
-	[Text]						[varchar](max)			NULL
+	[Text]						[varchar](max)			NULL,
+	[NK_ProcessChecksum]		[varbinary](8)			NULL
 )

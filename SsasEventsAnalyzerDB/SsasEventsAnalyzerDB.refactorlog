@@ -14,4 +14,25 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[LoadxEventTraceQueryData]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="35eb424a-292c-4d47-883e-af1e077f2561" ChangeDateTime="09/08/2016 09:55:25">
+    <Property Name="ElementName" Value="[dbo].[Processing]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[Process]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a77e8f2d-173f-45bd-a8db-b9faddad8445" ChangeDateTime="09/08/2016 09:55:45">
+    <Property Name="ElementName" Value="[dbo].[Process].[ProcessingId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Process]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ProcessId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="98a20c06-c898-45d4-a857-9b4fd2f47e8b" ChangeDateTime="09/08/2016 09:55:53">
+    <Property Name="ElementName" Value="[dbo].[Process].[ProcessingString]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Process]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ProcessString]" />
+  </Operation>
 </Operations>

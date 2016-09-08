@@ -193,7 +193,7 @@ BEGIN;
 		-- ==============================================================
 		-- Cleanup
 		-- ==============================================================
-		TRUNCATE TABLE stg.[xEventTraceQuery]
+		TRUNCATE TABLE stg.[xEventTraceQuery];
 
 	END TRY
 	BEGIN CATCH

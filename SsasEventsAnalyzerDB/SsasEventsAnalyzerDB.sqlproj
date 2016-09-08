@@ -84,6 +84,8 @@
     <Build Include="Schemas\stg\Stored Procedures\LoadxEventTraceProcessData.sql" />
     <Build Include="Schemas\stg\Tables\xEventDecode.sql" />
     <Build Include="Schemas\stg\Stored Procedures\LoadxEventDecode.sql" />
+    <Build Include="Schemas\dbo\Tables\Process.sql" />
+    <Build Include="Schemas\dbo\Tables\ProcessExecution.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
