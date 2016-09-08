@@ -10,8 +10,14 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-IF( '$(xevent_decode_load_flag)' = 1 )
+IF( '$(flg_xevent_decode_load)' = 1 )
 BEGIN;
 	EXEC stg.LoadxEventDecode @filepath_TraceDefinitinion = '$(xevent_decode_source_filepath)';
+END
+;
+IF( '$(flg_create_sql_agent_jobs)' = 1 )
+BEGIN;
+	:r .\SQLAgentJobs\Start-xEventQueryTrace.sql
+	:r .\SQLAgentJobs\Stop-xEventQueryTrace.sql
 END
 ;
