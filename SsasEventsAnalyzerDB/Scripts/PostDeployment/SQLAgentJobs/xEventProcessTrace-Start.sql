@@ -49,7 +49,7 @@ SET @StartProcessTrace_cmd = @StartProcessTrace_cmd + N'        <event_session n
 SET @StartProcessTrace_cmd = @StartProcessTrace_cmd + N'          <event package="AS" name="CommandEnd" /> ';
 SET @StartProcessTrace_cmd = @StartProcessTrace_cmd + N'          <event package="AS" name="ProgressReportEnd" /> ';
 SET @StartProcessTrace_cmd = @StartProcessTrace_cmd + N'          <target package="package0" name="event_file"> ';
-SET @StartProcessTrace_cmd = @StartProcessTrace_cmd + N'            <parameter name="filename" value="$(xevent_trace_dir)TraceQuery.xel" /> ';
+SET @StartProcessTrace_cmd = @StartProcessTrace_cmd + N'            <parameter name="filename" value="$(xevent_trace_dir)TraceProcess.xel" /> ';
 SET @StartProcessTrace_cmd = @StartProcessTrace_cmd + N'            <parameter name="max_file_size" value="4096" /> ';
 SET @StartProcessTrace_cmd = @StartProcessTrace_cmd + N'          </target> ';
 SET @StartProcessTrace_cmd = @StartProcessTrace_cmd + N'        </event_session> ';

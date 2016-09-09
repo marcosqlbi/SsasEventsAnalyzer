@@ -17,9 +17,9 @@ END
 ;
 IF( '$(flg_create_sql_agent_jobs)' = 1 )
 BEGIN;
-	:r .\SQLAgentJobs\Start-xEventQueryTrace.sql
-	:r .\SQLAgentJobs\Stop-xEventQueryTrace.sql
-	:r .\SQLAgentJobs\Start-xEventProcessTrace.sql
-	:r .\SQLAgentJobs\Stop-xEventProcessTrace.sql
+	:r .\SQLAgentJobs\xEventQueryTrace-Start.sql
+	:r .\SQLAgentJobs\xEventQueryTrace-Stop.sql
+	:r .\SQLAgentJobs\xEventProcessTrace-Start.sql
+	:r .\SQLAgentJobs\xEventProcessTrace-Stop.sql
 END
 ;

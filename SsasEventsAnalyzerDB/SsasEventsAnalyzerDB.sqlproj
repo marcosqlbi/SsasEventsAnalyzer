@@ -71,6 +71,8 @@
     <Folder Include="Scripts" />
     <Folder Include="Scripts\PostDeployment" />
     <Folder Include="Scripts\PostDeployment\SQLAgentJobs" />
+    <Folder Include="Schemas\dbo\Stored Procedures" />
+    <Folder Include="Scripts\PostDeployment\PowerShell" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\Schemas\stg.sql" />
@@ -87,13 +89,16 @@
     <Build Include="Schemas\stg\Stored Procedures\LoadxEventDecode.sql" />
     <Build Include="Schemas\dbo\Tables\Process.sql" />
     <Build Include="Schemas\dbo\Tables\ProcessExecution.sql" />
-    <None Include="Scripts\PostDeployment\SQLAgentJobs\Stop-xEventQueryTrace.sql" />
-    <None Include="Scripts\PostDeployment\SQLAgentJobs\Start-xEventProcessTrace.sql" />
-    <None Include="Scripts\PostDeployment\SQLAgentJobs\Stop-xEventProcessTrace.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\xEventQueryTrace-Stop.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\xEventProcessTrace-Start.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\xEventProcessTrace-Stop.sql" />
     <Build Include="Schemas\dbo\Tables\Model.sql" />
     <Build Include="Schemas\dbo\Tables\Database.sql" />
     <Build Include="Schemas\dbo\Tables\Table.sql" />
     <Build Include="Schemas\dbo\Tables\Partition.sql" />
+    <Build Include="Schemas\dbo\Stored Procedures\StartAgentJob.sql" />
+    <Build Include="Schemas\dbo\Stored Procedures\xEventQueryTrace-Roll.sql" />
+    <Build Include="Schemas\log\Tables\xEventFileAuditLog.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
@@ -109,12 +114,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DEV-Localhost-DropCreate.publish.xml" />
-    <None Include="Scripts\PostDeployment\SQLAgentJobs\Start-xEventQueryTrace.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\xEventQueryTrace-Start.sql" />
+    <None Include="Scripts\PostDeployment\PowerShell\Move-xEventTraceFiles.ps1" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\ProcessTraceFiles.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SsasEventsAnalyzerDB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
+    <SqlCmdVariable Include="event_trace_archive_dir">
+      <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log\xevent_trace_archive</DefaultValue>
+      <Value>$(SqlCmdVar__11)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="event_trace_processing_dir">
+      <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log\xevent_trace_processing</DefaultValue>
+      <Value>$(SqlCmdVar__10)</Value>
+    </SqlCmdVariable>
     <SqlCmdVariable Include="flg_create_sql_agent_jobs">
       <DefaultValue>1</DefaultValue>
       <Value>$(SqlCmdVar__4)</Value>
@@ -124,11 +139,11 @@
       <Value>$(SqlCmdVar__6)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="StartProcessTrace_JobName">
-      <DefaultValue>xEventProcess-StartTrace</DefaultValue>
+      <DefaultValue>xEventProcessTrace-Start</DefaultValue>
       <Value>$(SqlCmdVar__8)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="StartQueryTrace_JobName">
-      <DefaultValue>xEventQuery-StartTrace</DefaultValue>
+      <DefaultValue>xEventQueryTrace-Start</DefaultValue>
       <Value>$(SqlCmdVar__5)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="flg_xevent_decode_load">
@@ -136,11 +151,11 @@
       <Value>$(SqlCmdVar__2)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="StopProcessTrace_JobName">
-      <DefaultValue>xEventProcess-StopTrace</DefaultValue>
+      <DefaultValue>xEventProcessTrace-Stop</DefaultValue>
       <Value>$(SqlCmdVar__9)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="StopQueryTrace_JobName">
-      <DefaultValue>xEventQuery-StopTrace</DefaultValue>
+      <DefaultValue>xEventQueryTrace-Stop</DefaultValue>
       <Value>$(SqlCmdVar__7)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="xevent_decode_source_filepath">
