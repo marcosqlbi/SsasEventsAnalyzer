@@ -116,23 +116,39 @@
     <None Include="DEV-Localhost-DropCreate.publish.xml" />
     <None Include="Scripts\PostDeployment\SQLAgentJobs\xEventQueryTrace-Start.sql" />
     <None Include="Scripts\PostDeployment\PowerShell\Move-xEventTraceFiles.ps1" />
-    <None Include="Scripts\PostDeployment\SQLAgentJobs\ProcessTraceFiles.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\Process-xEventFiles.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SsasEventsAnalyzerDB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
-    <SqlCmdVariable Include="event_trace_archive_dir">
+    <SqlCmdVariable Include="xevent_trace_archive_dir">
       <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log\xevent_trace_archive</DefaultValue>
       <Value>$(SqlCmdVar__11)</Value>
     </SqlCmdVariable>
-    <SqlCmdVariable Include="event_trace_processing_dir">
+    <SqlCmdVariable Include="xevent_trace_processing_dir">
       <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log\xevent_trace_processing</DefaultValue>
       <Value>$(SqlCmdVar__10)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="flg_create_sql_agent_jobs">
       <DefaultValue>1</DefaultValue>
       <Value>$(SqlCmdVar__4)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="powershell_exe_path">
+      <DefaultValue>C:\Windows\System32\WindowsPowerShell\v1.0\Powershell.exe</DefaultValue>
+      <Value>$(SqlCmdVar__13)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="powershell_script_dir">
+      <DefaultValue>C:\SsasEventsAnalyzer\powershell_scripts\</DefaultValue>
+      <Value>$(SqlCmdVar__14)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="Process_xEventFiles_JobName">
+      <DefaultValue>Process-xEventFiles</DefaultValue>
+      <Value>$(SqlCmdVar__12)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="ssas_events_analyzer_server">
+      <DefaultValue>SQL-DEV-02</DefaultValue>
+      <Value>$(SqlCmdVar__15)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="ssas_instance">
       <DefaultValue>SQL-DEV-02\SSAS_TAB</DefaultValue>

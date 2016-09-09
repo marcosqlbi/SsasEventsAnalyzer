@@ -21,5 +21,6 @@ BEGIN;
 	:r .\SQLAgentJobs\xEventQueryTrace-Stop.sql
 	:r .\SQLAgentJobs\xEventProcessTrace-Start.sql
 	:r .\SQLAgentJobs\xEventProcessTrace-Stop.sql
+	:r .\SQLAgentJobs\Process-xEventFiles.sql
 END
 ;
