@@ -64,6 +64,7 @@ SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-xevent_src_trace_di
 SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-xevent_tgt_trace_dir ''$(xevent_trace_processing_dir)'' '
 SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-ssas_event_analyzer_server ''$(ssas_events_analyzer_server)'' '
 SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-ssas_event_analyzer_db ''$(DatabaseName)'' '
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-archive_flag 0 '
 SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'"'
 
 /* Create Job Steps */
@@ -118,6 +119,7 @@ SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'' + CHAR(13) + CHAR(
 SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'/* Process QueryTrace Files */' + CHAR(13) + CHAR(10);
 SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'EXEC stg.LoadxEventTraceQueryData @path_to_trace_file = @src_path; ' + CHAR(13) + CHAR(10);
 SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'' + CHAR(13) + CHAR(10);
+
 /* Create Job Steps */
 PRINT N'Creating Job Step: (Step03) Load xEventQuery Trace Files';
 EXEC msdb.dbo.sp_add_jobstep 
@@ -125,7 +127,7 @@ EXEC msdb.dbo.sp_add_jobstep
 		@step_name=N'(Step03) Load xEventQuery Trace Files', 
 		@step_id=3, 
 		@cmdexec_success_code=0, 
-		@on_success_action=1, 
+		@on_success_action=3, 
 		@on_fail_action=2, 
 		@retry_attempts=0, 
 		@retry_interval=0, 
@@ -133,6 +135,35 @@ EXEC msdb.dbo.sp_add_jobstep
 		@subsystem=N'TSQL', 
 		@command=@Process_xEventFiles_cmd, 
 		@database_name='$(DatabaseName)',
+		@flags=0
+;
+PRINT N'Building : (Step04) Archive Trace Files';
+SET @Process_xEventFiles_cmd = N'';
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'$(powershell_exe_path) ' 
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'"'
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'$(powershell_script_dir)' 
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'Move-xEventTraceFiles.ps1 '
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-xevent_src_trace_dir ''$(xevent_trace_processing_dir)'' '
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-xevent_tgt_trace_dir ''$(xevent_trace_archive_dir)'' '
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-ssas_event_analyzer_server ''$(ssas_events_analyzer_server)'' '
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-ssas_event_analyzer_db ''$(DatabaseName)'' '
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'-archive_flag 1 '
+SET @Process_xEventFiles_cmd = @Process_xEventFiles_cmd + N'"'
+
+/* Create Job Steps */
+PRINT N'Creating Job Step: (Step04) Archive Trace Files';
+EXEC msdb.dbo.sp_add_jobstep 
+		@job_id=@Process_xEventFiles_JobId, 
+		@step_name=N'(Step04) Archive Trace Files', 
+		@step_id=4, 
+		@cmdexec_success_code=0, 
+		@on_success_action=1, 
+		@on_fail_action=2, 
+		@retry_attempts=0, 
+		@retry_interval=0, 
+		@os_run_priority=0, 
+		@subsystem=N'CmdExec', 
+		@command=@Process_xEventFiles_cmd,
 		@flags=0
 ;
 

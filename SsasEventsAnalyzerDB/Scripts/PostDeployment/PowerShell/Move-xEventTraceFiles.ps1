@@ -2,7 +2,8 @@
     [string]$xevent_src_trace_dir, 
     [string]$xevent_tgt_trace_dir,
     [string]$ssas_event_analyzer_server,
-    [string]$ssas_event_analyzer_db
+    [string]$ssas_event_analyzer_db,
+    [int]$archive_flag
 )
 
 
@@ -37,7 +38,8 @@ Function Move-xEventTraceFiles {
         [Parameter(Position=0,mandatory=$true)][string] $xevent_src_trace_dir,
         [Parameter(Position=1,mandatory=$true)][string] $xevent_tgt_trace_dir,
         [Parameter(Position=2,mandatory=$true)][string] $ssas_event_analyzer_server,
-        [Parameter(Position=3,mandatory=$true)][string] $ssas_event_analyzer_db
+        [Parameter(Position=3,mandatory=$true)][string] $ssas_event_analyzer_db,
+        [Parameter(Position=4,mandatory=$true)][int] $archive_flag
     )
 
     Get-ChildItem -Path $xevent_src_trace_dir -Filter *.xel | 
@@ -51,8 +53,12 @@ Function Move-xEventTraceFiles {
                 Move-Item -Path $_.FullName -Destination $xevent_tgt_trace_dir
 
                 # add file to processing table
-                $sql_stmt = "INSERT INTO [log].[xEventFileAuditLog] (xEventFileName) VALUES ('" + $_.Name + "')"
-                Invoke-Sqlcmd -ServerInstance $ssas_event_analyzer_server -Database $ssas_event_analyzer_db -Query $sql_stmt
+				if ( $archive_flag -ne 1 ) {
+					$sql_stmt = "INSERT INTO [log].[xEventFileAuditLog] (xEventFileName) VALUES ('" + $_.Name + "');"
+				} else {
+					$sql_stmt = "UPDATE [log].[xEventFileAuditLog] SET [Archived_DT] = GETDATE() WHERE [xEventFileName] = '" + $_.Name + "';";
+				}
+				Invoke-Sqlcmd -ServerInstance $ssas_event_analyzer_server -Database $ssas_event_analyzer_db -Query $sql_stmt
             }
         }
 }
@@ -63,10 +69,12 @@ Function Move-xEventTraceFiles {
 # $xevent_tgt_trace_dir = "C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log\xevent_trace_processing"
 # $ssas_event_analyzer_server = "SQL-DEV-02"
 # $ssas_event_analyzer_db = "SsasEventsAnalyzerDB"
+# $archive_flag = 1
 
 # function call
 Move-xEventTraceFiles `
     -xevent_src_trace_dir $xevent_src_trace_dir `
     -xevent_tgt_trace_dir $xevent_tgt_trace_dir `
     -ssas_event_analyzer_server $ssas_event_analyzer_server `
-    -ssas_event_analyzer_db $ssas_event_analyzer_db
+    -ssas_event_analyzer_db $ssas_event_analyzer_db `
+    -archive_flag $archive_flag

@@ -4,6 +4,7 @@
 
 	[Moved_DT]						DATETIME2(3)		NOT NULL,
 	[Processed_DT]					DATETIME2(3)		NULL,
+	[Archived_DT]					DATETIME2(3)		NULL,
 
 	[Created]						DATETIME2(3)		NOT NULL,
 	[LastUpdated]					DATETIME2(3)		NOT NULL
