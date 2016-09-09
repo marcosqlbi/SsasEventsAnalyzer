@@ -97,7 +97,7 @@
     <Build Include="Schemas\dbo\Tables\Table.sql" />
     <Build Include="Schemas\dbo\Tables\Partition.sql" />
     <Build Include="Schemas\dbo\Stored Procedures\StartAgentJob.sql" />
-    <Build Include="Schemas\dbo\Stored Procedures\xEventQueryTrace-Roll.sql" />
+    <Build Include="Schemas\dbo\Stored Procedures\xEventTrace-Roll.sql" />
     <Build Include="Schemas\log\Tables\xEventFileAuditLog.sql" />
   </ItemGroup>
   <ItemGroup>
