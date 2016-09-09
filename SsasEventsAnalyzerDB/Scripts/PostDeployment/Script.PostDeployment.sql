@@ -24,3 +24,16 @@ BEGIN;
 	:r .\SQLAgentJobs\Process-xEventFiles.sql
 END
 ;
+
+
+IF( '$(start_query_trace_post_deployment)' = 1 )
+BEGIN;
+	EXEC [dbo].[StartAgentJob] @job_name = '$(StartQueryTrace_JobName)'
+END
+;
+IF( '$(start_process_trace_post_deployment)' = 1 )
+BEGIN;
+	EXEC [dbo].[StartAgentJob] @job_name = '$(StartProcessTrace_JobName)'
+END
+;
+

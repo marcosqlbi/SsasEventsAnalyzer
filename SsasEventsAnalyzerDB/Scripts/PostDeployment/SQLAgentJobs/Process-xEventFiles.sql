@@ -3,17 +3,18 @@
 	specified directories in order to move files around
 */
 
-/* step 2: process files
+/* step 2 & 3: process files
 	service account for SQL Server DB engine will need 
 	access to  specified directories in order to read files 
 
 		SPROC: dbo.LoadxEventTraceProcessData
 		SPROC: dbo.LoadxEventTraceQueryData
 
-		future state: query xEventFileAuditLog for unprocessed files (process in order if batching)
+		future state: query xEventFileAuditLog for unprocessed 
+		files (process in order if batching)
 */
 
-/* step 3: archive files 
+/* step 4: archive files 
 	service account for SQL Agent will need access to 
 	specified directories in order to move files around
 */

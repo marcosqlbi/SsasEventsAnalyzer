@@ -122,6 +122,14 @@
     <RefactorLog Include="SsasEventsAnalyzerDB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
+    <SqlCmdVariable Include="start_process_trace_post_deployment">
+      <DefaultValue>0</DefaultValue>
+      <Value>$(SqlCmdVar__17)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="start_query_trace_post_deployment">
+      <DefaultValue>0</DefaultValue>
+      <Value>$(SqlCmdVar__16)</Value>
+    </SqlCmdVariable>
     <SqlCmdVariable Include="xevent_trace_archive_dir">
       <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log\xevent_trace_archive</DefaultValue>
       <Value>$(SqlCmdVar__11)</Value>
