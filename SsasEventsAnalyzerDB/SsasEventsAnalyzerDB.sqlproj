@@ -99,6 +99,7 @@
     <Build Include="Schemas\dbo\Stored Procedures\StartAgentJob.sql" />
     <Build Include="Schemas\dbo\Stored Procedures\xEventTrace-Roll.sql" />
     <Build Include="Schemas\log\Tables\xEventFileAuditLog.sql" />
+    <Build Include="Schemas\dbo\Tables\Column.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">

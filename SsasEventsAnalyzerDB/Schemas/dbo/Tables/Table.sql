@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Table](
 	[ID_Table]				[int] IDENTITY(1,1) NOT NULL,
-	[TableName]				[varchar](128)		NOT NULL,
+	[TableName]				[varchar](255)		NOT NULL,
 	[TableGUID]				[varchar](256)		NOT NULL,
 	[ID_Database]			[int]				NOT NULL,
 	
@@ -8,6 +8,8 @@
 	[LastUpdated]			DATETIME2(3)		NOT NULL
 		
 	,CONSTRAINT [PK_dbo_Table] PRIMARY KEY CLUSTERED ([ID_Table] ASC)
+
+	,CONSTRAINT [UNQ_dbo_Table_DatabaseID_Table] UNIQUE ([ID_Database], [TableName])
 
 	,CONSTRAINT FK_dbo_Table__DatabaseId
 		FOREIGN KEY ([ID_Database])

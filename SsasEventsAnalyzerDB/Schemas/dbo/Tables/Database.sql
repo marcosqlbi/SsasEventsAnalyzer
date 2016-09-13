@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Database](
 	[ID_Database]		[int] IDENTITY(1,1) NOT NULL,
-	[DatabaseName]		[varchar](128) NOT NULL,
+	[DatabaseName]		[varchar](255)		NOT NULL,
 	
 	[Created]			DATETIME2(3)		NOT NULL,
 	[LastUpdated]		DATETIME2(3)		NOT NULL

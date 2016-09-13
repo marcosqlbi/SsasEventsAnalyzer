@@ -32,5 +32,6 @@
 	[ModelName]					[varchar](255)			NULL,
 	[TableName]					[varchar](255)			NULL,
 	[PartitionName]				[varchar](255)			NULL,
-	[PartitionTableGUID]		[varchar](255)			NULL
+	[PartitionTableGUID]		[varchar](255)			NULL,
+	[ColumnName]				[varchar](255)			NULL
 )

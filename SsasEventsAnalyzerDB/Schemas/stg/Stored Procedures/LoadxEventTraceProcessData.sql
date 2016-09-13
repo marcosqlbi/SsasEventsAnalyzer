@@ -101,6 +101,7 @@ BEGIN;
 					,[TableName]
 					,[PartitionName]
 					,[PartitionTableGUID]
+					,[ColumnName]
 			)
 			SELECT	 te.ActivityID
 					,te.ActivityIDxfer
@@ -158,6 +159,12 @@ BEGIN;
 						END
 					,[PartitionName] = CASE WHEN te.ObjectType IN (100021) THEN te.ObjectName END
 					,[PartitionTableGUID] = CASE WHEN te.ObjectType IN (100021) THEN REVERSE(LEFT(RIGHT( REVERSE(te.ObjectPath), LEN( REVERSE(te.ObjectPath) ) - CHARINDEX('.',REVERSE(te.ObjectPath)) ), CHARINDEX('.',RIGHT( REVERSE(te.ObjectPath), LEN( REVERSE(te.ObjectPath) ) - CHARINDEX('.',REVERSE(te.ObjectPath)) )) - 1)) END
+					,[ColumnName] = 
+						CASE
+							WHEN	te.EventClass = 6 AND /* Progress Report End */
+									te.EventSubclass = 44 /* Compress Segment */
+							THEN	SUBSTRING(te.[text], CHARINDEX('''',te.[text]) + 1, (CHARINDEX('''', SUBSTRING(te.[text], CHARINDEX('''',te.[text]) + 1, LEN(te.[Text])-CHARINDEX('''',te.[text]))) - 1) )
+						END
 			FROM    TabularEvents te
 			WHERE   te.EventClass IN (6, 16) -- Command End, Progress Report End
 		;
@@ -238,6 +245,32 @@ BEGIN;
 					,trc.ObjectID
 					,t.[ID_Table]
 		;
+
+		-- ==============================================================
+		-- Column
+		-- ==============================================================
+		INSERT INTO [dbo].[Column] (ColumnName, [ID_Table])
+			SELECT	 trc.[ColumnName]
+					,t.[ID_Table]
+			FROM	stg.xEventTraceProcess trc
+					INNER JOIN stg.xEventDecode x
+						ON	x.EventClassId = trc.EventClass AND
+							x.EventSubclassId = trc.EventSubclass
+					INNER JOIN [dbo].[Database] AS db
+						ON	db.DatabaseName = trc.DatabaseName
+					INNER JOIN [dbo].[Table] AS t
+						ON	t.TableGUID = trc.PartitionTableGUID AND 
+							t.[ID_Database] = db.ID_Database
+					LEFT OUTER JOIN [dbo].[Column] c
+						ON	c.ID_Table = t.ID_Table AND
+							c.ColumnName = trc.[ColumnName]
+			WHERE	trc.ColumnName IS NOT NULL AND
+					c.ID_Column IS NULL
+			GROUP BY trc.[ColumnName]
+					,t.[ID_Table]
+		;
+
+
 		-- ==============================================================
 		-- Process 
 		-- ==============================================================
