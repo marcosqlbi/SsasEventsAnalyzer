@@ -24,7 +24,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Excel", "Excel", "{A4A301B9
 		Excel\SsasEventsAnalyzer.xlsx = Excel\SsasEventsAnalyzer.xlsx
 	EndProjectSection
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SsasEventsAnalyzerDB", "SsasEventsAnalyzerDB\SsasEventsAnalyzerDB.sqlproj", "{67DB3A10-4250-4DC5-8ED6-67B8A0AC004D}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67DB3A10-4250-4DC5-8ED6-67B8A0AC004D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67DB3A10-4250-4DC5-8ED6-67B8A0AC004D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67DB3A10-4250-4DC5-8ED6-67B8A0AC004D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{67DB3A10-4250-4DC5-8ED6-67B8A0AC004D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67DB3A10-4250-4DC5-8ED6-67B8A0AC004D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67DB3A10-4250-4DC5-8ED6-67B8A0AC004D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection

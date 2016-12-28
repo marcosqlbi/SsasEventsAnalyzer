@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SsasEventsAnalyzerDB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{67db3a10-4250-4dc5-8ed6-67b8a0ac004d}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>SsasEventsAnalyzerDB</RootNamespace>
+    <AssemblyName>SsasEventsAnalyzerDB</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Schemas" />
+    <Folder Include="Security" />
+    <Folder Include="Security\Schemas" />
+    <Folder Include="Schemas\stg" />
+    <Folder Include="Schemas\stg\Tables" />
+    <Folder Include="Schemas\dbo" />
+    <Folder Include="Schemas\dbo\Tables" />
+    <Folder Include="Schemas\stg\Stored Procedures" />
+    <Folder Include="Schemas\log" />
+    <Folder Include="Schemas\log\Tables" />
+    <Folder Include="Schemas\log\Stored Procedures" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\PostDeployment" />
+    <Folder Include="Scripts\PostDeployment\SQLAgentJobs" />
+    <Folder Include="Schemas\dbo\Stored Procedures" />
+    <Folder Include="Scripts\PostDeployment\PowerShell" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Security\Schemas\stg.sql" />
+    <Build Include="Schemas\stg\Tables\xEventTraceQuery.sql" />
+    <Build Include="Schemas\dbo\Tables\Query.sql" />
+    <Build Include="Schemas\dbo\Tables\QueryExecution.sql" />
+    <Build Include="Schemas\stg\Stored Procedures\LoadxEventTraceQueryData.sql" />
+    <Build Include="Security\Schemas\log.sql" />
+    <Build Include="Schemas\log\Stored Procedures\LogError.sql" />
+    <Build Include="Schemas\log\Tables\Error.sql" />
+    <Build Include="Schemas\stg\Tables\xEventTraceProcess.sql" />
+    <Build Include="Schemas\stg\Stored Procedures\LoadxEventTraceProcessData.sql" />
+    <Build Include="Schemas\stg\Tables\xEventDecode.sql" />
+    <Build Include="Schemas\stg\Stored Procedures\LoadxEventDecode.sql" />
+    <Build Include="Schemas\dbo\Tables\Process.sql" />
+    <Build Include="Schemas\dbo\Tables\ProcessExecution.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\xEventQueryTrace-Stop.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\xEventProcessTrace-Start.sql" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\xEventProcessTrace-Stop.sql" />
+    <Build Include="Schemas\dbo\Tables\Model.sql" />
+    <Build Include="Schemas\dbo\Tables\Database.sql" />
+    <Build Include="Schemas\dbo\Tables\Table.sql" />
+    <Build Include="Schemas\dbo\Tables\Partition.sql" />
+    <Build Include="Schemas\dbo\Stored Procedures\StartAgentJob.sql" />
+    <Build Include="Schemas\dbo\Stored Procedures\xEventTrace-Roll.sql" />
+    <Build Include="Schemas\log\Tables\xEventFileAuditLog.sql" />
+    <Build Include="Schemas\dbo\Tables\Column.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
+    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\msdb.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\msdb.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>msdb</DatabaseVariableLiteralValue>
+    </ArtifactReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DEV-Localhost-DropCreate.publish.xml" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\xEventQueryTrace-Start.sql" />
+    <None Include="Scripts\PostDeployment\PowerShell\Move-xEventTraceFiles.ps1" />
+    <None Include="Scripts\PostDeployment\SQLAgentJobs\Process-xEventFiles.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SsasEventsAnalyzerDB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="start_process_trace_post_deployment">
+      <DefaultValue>0</DefaultValue>
+      <Value>$(SqlCmdVar__17)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="start_query_trace_post_deployment">
+      <DefaultValue>0</DefaultValue>
+      <Value>$(SqlCmdVar__16)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="xevent_trace_archive_dir">
+      <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log\xevent_trace_archive</DefaultValue>
+      <Value>$(SqlCmdVar__11)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="xevent_trace_processing_dir">
+      <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log\xevent_trace_processing</DefaultValue>
+      <Value>$(SqlCmdVar__10)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="flg_create_sql_agent_jobs">
+      <DefaultValue>1</DefaultValue>
+      <Value>$(SqlCmdVar__4)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="powershell_exe_path">
+      <DefaultValue>C:\Windows\System32\WindowsPowerShell\v1.0\Powershell.exe</DefaultValue>
+      <Value>$(SqlCmdVar__13)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="powershell_script_dir">
+      <DefaultValue>C:\SsasEventsAnalyzer\powershell_scripts\</DefaultValue>
+      <Value>$(SqlCmdVar__14)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="Process_xEventFiles_JobName">
+      <DefaultValue>Process-xEventFiles</DefaultValue>
+      <Value>$(SqlCmdVar__12)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="ssas_events_analyzer_server">
+      <DefaultValue>SQL-DEV-02</DefaultValue>
+      <Value>$(SqlCmdVar__15)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="ssas_instance">
+      <DefaultValue>SQL-DEV-02\SSAS_TAB</DefaultValue>
+      <Value>$(SqlCmdVar__6)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="StartProcessTrace_JobName">
+      <DefaultValue>xEventProcessTrace-Start</DefaultValue>
+      <Value>$(SqlCmdVar__8)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="StartQueryTrace_JobName">
+      <DefaultValue>xEventQueryTrace-Start</DefaultValue>
+      <Value>$(SqlCmdVar__5)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="flg_xevent_decode_load">
+      <DefaultValue>1</DefaultValue>
+      <Value>$(SqlCmdVar__2)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="StopProcessTrace_JobName">
+      <DefaultValue>xEventProcessTrace-Stop</DefaultValue>
+      <Value>$(SqlCmdVar__9)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="StopQueryTrace_JobName">
+      <DefaultValue>xEventQueryTrace-Stop</DefaultValue>
+      <Value>$(SqlCmdVar__7)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="xevent_decode_source_filepath">
+      <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\bin\Resources\1033\tracedefinition130.xml</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="xevent_trace_dir">
+      <DefaultValue>C:\Program Files\Microsoft SQL Server\MSAS13.SSAS_TAB\OLAP\Log\</DefaultValue>
+      <Value>$(SqlCmdVar__3)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\PostDeployment\Script.PostDeployment.sql" />
+  </ItemGroup>
+</Project>
